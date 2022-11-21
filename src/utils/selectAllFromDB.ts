@@ -1,24 +1,22 @@
 import AWS from "aws-sdk";
 
 import { CONFIG } from "../config";
+import { TData } from "../types/types";
 
 AWS.config.update(CONFIG.aws);
 const DYNAMODB = new AWS.DynamoDB.DocumentClient();
 
-const returnData = async () => {
+const selectAllFromDB = async (tableName: TData) => {
   return new Promise((resolve, reject) => {
     try {
       const params = {
-        TableName: "dynamo-scala",
-        Key: {
-          id: 1,
-          name: "test1",
-        },
+        TableName: tableName,
+        Select: "ALL_ATTRIBUTES",
       };
 
-      DYNAMODB.get(params, (err, data) => {
+      DYNAMODB.scan(params, (err, data) => {
         if (!err) {
-          resolve(data.Item);
+          resolve(data.Items);
         }
       });
     } catch (err) {
@@ -27,4 +25,4 @@ const returnData = async () => {
   });
 };
 
-export default returnData;
+export default selectAllFromDB;
