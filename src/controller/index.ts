@@ -55,6 +55,13 @@ const Controller = {
     );
     res.status(200).send(response);
   },
+
+  async returnAllTasks(req: Request, res: Response) {
+    const response = {
+      tasks: await selectAllFromDB("clickup_tasks"),
+    };
+    res.status(200).send(response);
+  },
 };
 
 export default Controller;
