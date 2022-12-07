@@ -57,10 +57,24 @@ const Controller = {
   },
 
   async returnAllTasks(req: Request, res: Response) {
-    const response = {
-      tasks: await selectAllFromDB("clickup_tasks"),
-    };
-    res.status(200).send(response);
+    if (req.query.include_subtasks === "false") {
+      const params = {
+        FilterExpression: "#parent = :parent",
+        ExpressionAttributeNames: {
+          "#parent": "parent",
+        },
+        ExpressionAttributeValues: {
+          ":parent": null,
+        },
+      };
+      const response = await scanItemsFromDB("clickup_tasks", params);
+      return res.status(200).send(response);
+    } else {
+      const response = {
+        tasks: await selectAllFromDB("clickup_tasks"),
+      };
+      return res.status(200).send(response);
+    }
   },
 };
 
