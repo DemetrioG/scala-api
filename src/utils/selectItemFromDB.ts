@@ -22,7 +22,7 @@ const selectItemFromDB = async (
 
       DYNAMODB.get(params, (err, data) => {
         if (!err) {
-          resolve([data.Item]);
+          resolve(data.Item);
         }
       });
     } catch (err) {
